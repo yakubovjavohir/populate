@@ -1,9 +1,9 @@
-import { PhoneData } from "../../lib/phoneData.js"
-import { PhoneModel } from "../../lib/phoneModel.js"
+import { ProductData } from "../../lib/productData.js"
+import { ProductModel } from "./entity/index.js"
 import { ResData } from "../../lib/resData.js"
 import { idValidate } from "../../lib/idValidate.js"
 
-class PhoneService {
+class ProductService {
     #repository
     constructor(repository) {
         this.#repository = repository
@@ -14,31 +14,36 @@ class PhoneService {
         return resdata
     }
     async yangiMaxsulotQoshish(data) {
-        const phonedata = new PhoneData(data.name, data.brand, data.price, data.count)
-        console.log(phonedata);
+        const phonedata = new ProductData(data.name, data.price, data.count)
         
         const newData = await this.#repository.create(phonedata)
         const resdata = new ResData(201, "product qo'shildi!", newData)
         return resdata
     }
     async malumotniOchirish(id) {
-        const data = await this.#repository.findOne({PhoneID : id})
-        console.log(data.PhoneID);
-        console.log(id);
+        const data = await this.#repository.findOne({_id : id})
         
-        
-        idValidate(id, data.PhoneID)
+        idValidate(id, data._id)
         
         
         if (!id) {
             const resdata = new ResData(404, "siz kiritgan id dagi malumot mavjud emas!")
             return resdata
         }
-        const deleteData = await this.#repository.deleteOne({PhoneID : id})
+        await this.#repository.deleteOne({_id : id})
         const resdata = new ResData(200, `${id} id li malumot o'chirildi!`)
+        return resdata
+    }
+    async idOrqaliTopish(id){
+        if (!id) {
+            const resdata = new ResData(404, "siz kiritgan id dagi product mavjud emas!")
+            return resdata
+        }
+        const d = await this.#repository.findOne({_id : id})
+        const resdata = new ResData(200, `${id} id li product`, d)
         return resdata
     }
 }
 
-const phoneService = new PhoneService(PhoneModel)
-export {phoneService}
+const productService = new ProductService(ProductModel)
+export {productService}

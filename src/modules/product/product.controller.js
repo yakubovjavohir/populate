@@ -1,7 +1,7 @@
-import { phoneService } from "./phone.service.js"
+import { productService } from "./product.service.js"
 
 
-class PhoneController {
+class ProductController {
     #service
     constructor(service) {
         this.#service = service
@@ -28,8 +28,18 @@ class PhoneController {
 
     async delete(req, res, next){
         try {
-            const id = Number(req.params.id)
+            const id = req.params.id
             const resdata = await this.#service.malumotniOchirish(id)
+            res.status(200).json(resdata)
+        } catch (error) {
+            next(error)
+        }
+    }
+
+    async getOne(req, res, next){
+        try {
+            const id = req.params.id
+            const resdata = await this.#service.idOrqaliTopish(id)
             res.status(200).json(resdata)
         } catch (error) {
             next(error)
@@ -37,5 +47,5 @@ class PhoneController {
     }
 }
 
-const phoneController = new PhoneController(phoneService)
-export {phoneController}
+const productController = new ProductController(productService)
+export {productController}

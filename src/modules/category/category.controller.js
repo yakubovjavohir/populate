@@ -1,7 +1,7 @@
-import { appService } from "./phone.service.js"
+import { categoryService } from "./category.service.js"
 
 
-class AppController {
+class CategoryController {
     #service
     constructor(service) {
         this.#service = service
@@ -9,7 +9,7 @@ class AppController {
 
     async getAll(req, res, next) {
         try {
-            const resdata = await this.#service.barchaIlovalarniOlish()
+            const resdata = await this.#service.barchaCategorylarniOlish()
             res.status(200).json(resdata)
         } catch (error) {
             next(error)
@@ -19,7 +19,7 @@ class AppController {
     async create(req, res, next){
         try {
             const body = req.body
-            const resdata = await this.#service.yangiIlovaQoshish(body)
+            const resdata = await this.#service.yangiCategoryQoshish(body)
             res.status(201).json(resdata)
         } catch (error) {
             next(error)
@@ -28,8 +28,8 @@ class AppController {
 
     async delete(req, res, next){
         try {
-            const id = Number(req.params.id)
-            const resdata = await this.#service.ilovaniOchirish(id)
+            const id = req.params.id
+            const resdata = await this.#service.CategoryniOchirish(id)
             res.status(200).json(resdata)
         } catch (error) {
             next(error)
@@ -38,7 +38,7 @@ class AppController {
 
     async getOne(req, res, next){
         try {
-            const id = Number(req.params.id)
+            const id = req.params.id
             const resdata = await this.#service.idOrqaliTopish(id)
             res.status(200).json(resdata)
         } catch (error) {
@@ -47,5 +47,5 @@ class AppController {
     }
 }
 
-const appController = new AppController(appService)
-export {appController}
+const categoryController = new CategoryController(categoryService)
+export {categoryController}
